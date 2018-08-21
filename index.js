@@ -35,7 +35,7 @@ function parseMods(m) {
     return enabled;
 }
 
-class TaikoScore {
+class taikoScore {
   /**
     @param {String} res
     @param {Number} stars

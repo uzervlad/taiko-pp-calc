@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/uzervlad/taiko-pp-calc#readme",
   "dependencies": {
+    "index.js": "0.0.3",
     "osu-parser": "^0.3.3"
   }
 }
