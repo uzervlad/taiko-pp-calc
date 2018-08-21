@@ -92,7 +92,7 @@ class taikoScore {
     
     strainValue *= Math.pow(0.985, misses);
     
-    if(combo > 0) strainValue *= Math.min(Math.pow(combo, 0.5) / Math.pow(this.parsedObject.maxCombo, 0.5), 1)
+    if(combo > 0) strainValue *= Math.min(Math.pow(this.parsedObject.maxCombo, 0.5) / Math.pow(combo, 0.5), 1)
     
     if(this.mods.indexOf('Hidden') != -1) strainValue *= 1.025;
     
@@ -112,7 +112,7 @@ class taikoScore {
       return;
     }
     
-    accValue = Math.pow(150 / this.hitWindow300, 1.1) * Math.pow(this.acc, 15) * 22;
+    accValue = Math.pow(150 / this.hitWindow300, 1.1) * Math.pow(acc, 15) * 22;
     
     accValue *= Math.min(1.15, Math.pow(this.totalHits / 1500, 0.3));
     
