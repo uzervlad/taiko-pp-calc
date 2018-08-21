@@ -104,7 +104,7 @@ class taikoScore {
   }
   
   computeAcc(acc) {
-    this.hitWindow300();
+    this.hitWindow();
     
     let accValue = 0;
     
@@ -119,7 +119,7 @@ class taikoScore {
     return this.accValue = accValue;
   }
   
-  hitWindow300() {
+  hitWindow() {
     this.scaleOD();
     
     var max = 50;
