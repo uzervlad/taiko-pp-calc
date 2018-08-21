@@ -18,6 +18,11 @@ const codes = {
     16416:  'Perfect'
 }
 
+/**
+ * 
+ * @param {Number} m
+ * @returns {String[]} 
+ */
 function parseMods(m) {
     if(typeof m != "Number") m = Number(m);
     
@@ -47,32 +52,31 @@ class taikoScore {
   constructor(res, stars, mods, combo, accuracy, misses) {
     this.parsedObject = osuParser.parseContent(res);
     this.starrate = stars;
-    this.totalHits = this.parsedObject.nbCircles + this.parsedObject.nbSliders + this.parsedObject.nbSpinners; // <-- ?
+    this.totalHits = this.parsedObject.nbCircles + this.parsedObject.nbSliders; // <-- ?
     this.miss = misses;
     this.combo = combo;
     this.mods = parseMods(mods);
     this.acc = accuracy;
-    this.od = Number(this.parsedObject.OverallDifficulty);
+    this.rawod = Number(this.parsedObject.OverallDifficulty);
     if(this.acc > 1) {
-      this.acc / 100;
+      this.acc /= 100;
     }
     
     this.computeStrain(this.combo, this.miss, this.acc);
     this.computeAcc(this.acc);
     this.pp = this.computeTotal();
     
-    this.computeStrain(this.parsedObject.maxCombo, 0, this.acc);
+    this.computeStrain(this.totalHits, 0, this.acc);
     this.fcpp = this.computeTotal();
-    
-    this.computeStrain(this.parsedObject.maxCombo, 0, 1);
+	
+    this.computeStrain(this.totalHits, 0, 1);
     this.computeAcc(1);
     this.maxpp = this.computeTotal();
   }
   
   computeTotal() {
     if(this.mods.indexOf("Relax") != -1 || this.mods.indexOf("Autoplay") != -1 || this.mods.indexOf("Autopilot") != -1) {
-      this.pp = 0;
-      return;
+      return 0;
     }
     
     let multiplier = 1.1;
@@ -80,26 +84,26 @@ class taikoScore {
     if(this.mods.indexOf("NoFail") != -1) multiplier *= 0.9;
     
     if(this.mods.indexOf("Hidden") != -1) multiplier *= 1.1;
-    
+
     return Math.pow(Math.pow(this.strain, 1.1) + Math.pow(this.accValue, 1.1), 1.0 / 1.1) * multiplier;
   }
   
   computeStrain(combo, misses, acc) {
     let strainValue = Math.pow(5 * Math.max(1, this.starrate / 0.0075) - 4, 2) / 100000;
-    
+
     let lengthBonus = 1 + 0.1 * Math.min(1, (this.totalHits / 1500));
     strainValue *= lengthBonus;
     
     strainValue *= Math.pow(0.985, misses);
     
-    if(combo > 0) strainValue *= Math.min(Math.pow(this.parsedObject.maxCombo, 0.5) / Math.pow(combo, 0.5), 1)
+    if(combo > 0) strainValue *= Math.min(Math.pow(this.totalHits, 0.5) / Math.pow(combo, 0.5), 1)
     
     if(this.mods.indexOf('Hidden') != -1) strainValue *= 1.025;
     
     if(this.mods.indexOf('Flashlight') != -1) strainValue *= (1.05 * lengthBonus);
     
     strainValue *= acc;
-    
+
     return this.strain = strainValue;
   }
   
@@ -111,14 +115,14 @@ class taikoScore {
     if(this.hitWindow300 <= 0) {
       return;
     }
-    
+
     accValue = Math.pow(150 / this.hitWindow300, 1.1) * Math.pow(acc, 15) * 22;
     
     accValue *= Math.min(1.15, Math.pow(this.totalHits / 1500, 0.3));
     
     return this.accValue = accValue;
   }
-  
+
   hitWindow() {
     this.scaleOD();
     
@@ -133,6 +137,7 @@ class taikoScore {
   }
   
   scaleOD() {
+	this.od = this.rawod;
     if(this.mods.indexOf("Easy") != -1) this.od /=2;
     if(this.mods.indexOf("HardRock") != -1) this.od *= 1.4;
     this.od = Math.max(Math.min(this.od, 10), 0);
