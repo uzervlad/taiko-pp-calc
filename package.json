@@ -1,0 +1,27 @@
+{
+  "name": "taiko-pp-calc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uzervlad/taiko-pp-calc.git"
+  },
+  "keywords": [
+    "osu",
+    "taiko",
+    "pp"
+  ],
+  "author": "uzervlad",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/uzervlad/taiko-pp-calc/issues"
+  },
+  "homepage": "https://github.com/uzervlad/taiko-pp-calc#readme",
+  "dependencies": {
+    "osu-parser": "^0.3.3"
+  }
+}
